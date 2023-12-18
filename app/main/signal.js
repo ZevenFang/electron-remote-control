@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const signal = new EventEmitter();
 const isDev = require('electron-is-dev')
 
-const SERVER_IP = 'ws://tx.fangzf.me'
+const SERVER_IP = 'ws://42.193.142.37'
 const PORT = '8010'
 const ws = new WebSocket(SERVER_IP + ':' + PORT);
 
