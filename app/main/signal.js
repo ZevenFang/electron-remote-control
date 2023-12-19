@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const EventEmitter = require('events');
+const { dialog } = require('electron');
 const signal = new EventEmitter();
 
 let interval = null
@@ -32,7 +33,13 @@ function createWS() {
 
         ws.on('message', function incoming(message) {
             let data = JSON.parse(message)
-            signal.emit(data.event, data.data)
+            try {
+                signal.emit(data.event, data.data)
+            } catch (e) {
+                console.error(e.context.msg)
+                if (e.context.msg === 'user not found')
+                    dialog.showErrorBox('温馨提示', '控制码不存在')
+            }
         })
 
 
