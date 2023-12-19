@@ -23,6 +23,15 @@ module.exports = function () {
         sendMainWindow('control-state-change', data.remote, 2)
     })
 
+    signal.on('disconnect', () => {
+        sendMainWindow('control-state-change', null, 4)
+    })
+
+    signal.on('reconnect', async (data) => {
+        let {code} = await signal.invoke('login', null, 'logined')
+        sendMainWindow('control-state-change', code, 3)
+    })
+
     // puppet、control共享的信道，就是转发
     ipcMain.on('forward', (e, event, data) => {
         signal.send('forward', {event, data})

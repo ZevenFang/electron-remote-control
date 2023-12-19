@@ -26,6 +26,10 @@ function App() {
       text = `正在远程控制${name}`
     } else if(type === 2) {
       text = `被${name}控制中`
+    } else if(type === 3) {
+      setLocalCode(name)
+    } else if(type === 4) {
+      text = '重新连接服务器中...'
     } else {
       text = ''
     }
@@ -53,7 +57,11 @@ function App() {
             <div>你的控制码 <span onContextMenu={(e) => handleContextMenu(e)} >{localCode}</span></div>
             <input type="text" value={remoteCode} onChange={(e) => setRemoteCode(e.target.value)}/>
             <button onClick={() => {startControl(remoteCode)}}>确认</button>
-          </> : <div>{controlText}</div>
+          </> :
+          <div>
+            {controlText}<br/>
+            <button onClick={() => setControlText('')}>取消控制</button>
+          </div>
         }
       </div>
   );
