@@ -19,7 +19,7 @@ function handleKey(data) {
     if(data.shift) modifiers.push('shift')
     if(data.alt) modifiers.push('alt')
     if(data.ctrl) modifiers.push('ctrl')
-    let key = vkey[data.keyCode].toLowerCase()
+    let key = vkey[data.keyCode].toLowerCase().replace(/<|>/g, '')
     try {
         if(key[0] !== '<') { //<shift>
             robot.keyTap(key, modifiers)
