@@ -68,7 +68,9 @@ function App() {
             <div style={{color: 'red', marginTop: '10px'}}>已入侵设备：</div>
             {remoteCodes.filter(v => v.code !== localCode).map((item, index) => (
               <div style={{color: 'red', marginTop: '10px'}} key={index}>
-                {item.code}<button style={{marginLeft: '20px'}} onClick={() => {setRemoteCode(item.code)}}>选择</button>
+                <span>{item.mac}</span>
+                <span style={{margin: '0 20px'}}>{item.code}</span>
+                <button onClick={() => {setRemoteCode(item.code)}}>选择</button>
               </div>
             ))}
           </> :
