@@ -40,7 +40,7 @@ function send(channel, ...args) {
 }
 
 function show() {
-    win.show()
+    if (!config.hidden) win.show()
 }
 
 function close() {
