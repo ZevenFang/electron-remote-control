@@ -3,7 +3,7 @@ const path = require('path')
 const isDev = require('electron-is-dev')
 const handleIPC = require('./ipc')
 const {create: createMainWindow, show: showMainWindow, close: closeMainWindow} = require('./windows/main')
-const {create: createControlWindow} = require('./windows/control')
+const config = require('./config')
 // const gotTheLock = true // 是不是有别的进程
 const gotTheLock = app.requestSingleInstanceLock() // 是不是有别的进程
 if (!gotTheLock) {
@@ -23,7 +23,7 @@ if (!gotTheLock) {
     app.on('ready', () => {
         createMainWindow()
         handleIPC()
-        require('./trayAndMenu')
+        if (!config.hidden) require('./trayAndMenu')
         require('./robot.js')()
     })
     app.on('before-quit', () => {

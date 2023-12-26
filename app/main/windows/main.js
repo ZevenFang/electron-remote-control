@@ -1,7 +1,7 @@
 const {BrowserWindow} = require('electron')
 const isDev = require('electron-is-dev')
 const path = require('path')
-
+const config = require('../config')
 
 let win
 let willQuitApp = false
@@ -9,6 +9,7 @@ function create () {
     win = new BrowserWindow({
         width: 600,
         height: 300,
+        show: !config.hidden,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation:false
