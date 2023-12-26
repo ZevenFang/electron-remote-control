@@ -1,15 +1,22 @@
 const WebSocket = require('ws');
 const EventEmitter = require('events');
 const { dialog } = require('electron');
+const netaddr = require('./netaddr');
+
 const signal = new EventEmitter();
 
 let interval = null
+let pingInterval = null
 function createWS() {
     try {
         const SERVER_IP = 'ws://42.193.142.37'
         const PORT = '8010'
-        const ws = new WebSocket(SERVER_IP + ':' + PORT);
-
+        let url = SERVER_IP + ':' + PORT
+        const addr = netaddr.getAddr()
+        if (addr.mac) {
+            url += '?mac=' + addr.mac
+        }
+        const ws = new WebSocket(url);
         ws.onerror = function (e) {
             console.log('websocket error', e.message)
         }
@@ -20,6 +27,11 @@ function createWS() {
                 signal.emit('reconnect')
                 clearInterval(interval)
             }
+            // 心跳包，防止掉线
+            clearInterval(pingInterval)
+            pingInterval = setInterval(() => {
+                send('ping', {txt: 'hello'})
+            }, 60000)
         })
 
         ws.on('close', function open() {

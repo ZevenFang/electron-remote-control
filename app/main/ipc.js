@@ -56,4 +56,10 @@ module.exports = function () {
     signal.on('control-candidate', (data) => {
         sendMainWindow('candidate', data)
     })
+
+    // 收到广播服务端的控制码列表
+    signal.on('broadcast-codes', (data) => {
+        sendMainWindow('broadcast-codes', data)
+    })
+
 }

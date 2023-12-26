@@ -11,6 +11,7 @@ function App() {
   const [localCode, setLocalCode] = useState('');
   // 0未连接，1已控制，2被控制
   const [controlText, setControlText] = useState('');
+  const [remoteCodes, setRemoteCodes] = useState([]);
 
   const startControl = (remoteCode) => {
     ipcRenderer.send('control', remoteCode)
@@ -36,12 +37,19 @@ function App() {
     setControlText(text)
   }
 
+  const handleBroadcastCodes = (e, codes) => {
+    setRemoteCodes(codes)
+  }
+
   useEffect(() => {
     login()
     ipcRenderer.on('control-state-change', handleControlState)
+    ipcRenderer.on('broadcast-codes', handleBroadcastCodes)
     return () => {
-      ipcRenderer.removeListener('control-state-change', handleControlState)
+      ipcRenderer.removeListener('control-state-change', handleControlState);
+      ipcRenderer.removeListener('broadcast-codes', handleBroadcastCodes);
     }
+    // eslint-disable-next-line
   }, [])
 
   const handleContextMenu = (e) => {
@@ -57,6 +65,12 @@ function App() {
             <div>你的控制码 <span onContextMenu={(e) => handleContextMenu(e)} >{localCode}</span></div>
             <input type="text" value={remoteCode} onChange={(e) => setRemoteCode(e.target.value)}/>
             <button onClick={() => {startControl(remoteCode)}}>确认</button>
+            <div style={{color: 'red', marginTop: '10px'}}>已入侵设备：</div>
+            {remoteCodes.filter(v => v.code !== localCode).map((item, index) => (
+              <div style={{color: 'red', marginTop: '10px'}} key={index}>
+                {item.code}<button style={{marginLeft: '20px'}} onClick={() => {setRemoteCode(item.code)}}>选择</button>
+              </div>
+            ))}
           </> :
           <div>
             {controlText}<br/>
